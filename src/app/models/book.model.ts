@@ -26,8 +26,8 @@ const bookSchema = new Schema<IBook>(
     },
     isbn: {
       type: String,
+      unique: [true, "The isbn number is already taken"],
       required: true,
-      unique: true,
     },
     description: String,
     copies: {
