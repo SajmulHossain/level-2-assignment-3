@@ -57,3 +57,15 @@ bookRouter.put('/:id', async(req: Request, res:Response) => {
     data: book
   });
 })
+
+
+// * delete book 
+bookRouter.delete("/:id", async(req: Request, res: Response) => {
+  const { id } = req.params;
+  const book = await Books.deleteOne({_id: id});
+  res.json({
+    success: true,
+    message: "Book deleted successfully",
+    data: null,
+  });
+})
