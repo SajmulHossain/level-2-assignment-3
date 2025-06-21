@@ -18,7 +18,7 @@ app.use((req: Request, res: Response) => {
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     if(error) {
         res.status(400).json({
-            message: "Validation failed",
+            message: error.name === 'ValidationError' ? 'Validation failed' :error.name === 'CastError' ? "Document doesn't exist with this id": "Unknown Error" ,
             success: false,
             error
         })

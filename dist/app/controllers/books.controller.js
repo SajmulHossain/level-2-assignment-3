@@ -16,17 +16,20 @@ exports.bookRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const book_model_1 = require("../models/book.model");
 exports.bookRouter = express_1.default.Router();
-// bookRouter.get("/", async (req: Request, res: Response) => {
-//   const { filter, sortBy, sort, limit } = req.query;
-//   const query = filter ? {genre: filter} : {};
-// //   const sorting = sortBy ? { sortBy: sort || 1 } : {};
-//   const books = await Books.find(query).sort(sorting);
-//   res.send({
-//     success: true,
-//     message: "Books retrieved successfully",
-//     data: books,
-//   });
-// });
+// * getting all books with filter, sorting and limit = 10
+exports.bookRouter.get("", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { filter, sortBy, sort, limit } = req.query;
+    const query = filter ? { genre: filter } : {};
+    const sorting = sortBy ? { [sortBy]: sort || "asc" } : {};
+    const limitValue = limit ? parseInt(limit) : 10;
+    const books = yield book_model_1.Books.find(query).sort(sorting).limit(limitValue);
+    res.json({
+        success: true,
+        message: "Books retrieved successfully",
+        data: books,
+    });
+}));
+// * post book
 exports.bookRouter.post("", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     const book = yield book_model_1.Books.create(body);
@@ -34,5 +37,15 @@ exports.bookRouter.post("", (req, res) => __awaiter(void 0, void 0, void 0, func
         success: true,
         message: "Book created successfully",
         data: book,
+    });
+}));
+// * getting single book by it's id
+exports.bookRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const book = yield book_model_1.Books.findById(id);
+    res.json({
+        success: true,
+        message: "Book retrieved successfully",
+        data: book
     });
 }));

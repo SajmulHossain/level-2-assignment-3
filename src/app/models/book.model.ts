@@ -22,6 +22,7 @@ const bookSchema = new Schema<IBook>(
         "BIOGRAPHY",
         "FANTASY",
       ],
+      required: true,
       uppercase: true,
     },
     isbn: {
