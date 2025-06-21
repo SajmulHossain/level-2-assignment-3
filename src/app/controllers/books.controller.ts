@@ -44,3 +44,16 @@ bookRouter.get("/:id", async(req: Request, res: Response) => {
     data: book
   });
 })
+
+
+// * update book
+bookRouter.put('/:id', async(req: Request, res:Response) => {
+  const { id } = req.params;
+  const { body} = req;
+  const book = await Books.findByIdAndUpdate(id, body, {new: true});
+  res.status(202).json({
+    success: true,
+    message: "Book updated successfully",
+    data: book
+  });
+})
