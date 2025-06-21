@@ -11,7 +11,7 @@ const port: number = 3000;
 async function main() {
     try {
         await mongoose.connect(
-          `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.saftd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+          `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.saftd.mongodb.net/libraryDB?retryWrites=true&w=majority&appName=Cluster0`
         );
 
         server = app.listen(port, () => {
