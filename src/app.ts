@@ -1,6 +1,24 @@
-import express, { Application } from 'express'
+import express, { Application, NextFunction, Request, Response } from 'express'
+import { bookRouter } from './app/controllers/books.controller';
 
 const app: Application = express();
+app.use(express.json());
 
+app.use("/api/books", bookRouter);
+
+
+app.get("/", (req: Request, res: Response) => {
+    res.send("Library management server is walking!!!!!")
+})
+
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+    if(error) {
+        res.status(400).json({
+            message: "Validation failed",
+            success: false,
+            error
+        })
+    }
+})
 
 export default app;
