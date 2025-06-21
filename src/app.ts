@@ -11,6 +11,10 @@ app.get("/", (req: Request, res: Response) => {
     res.send("Library management server is walking!!!!!")
 })
 
+app.use((req: Request, res: Response) => {
+  res.status(404).json({ message: "Route not found", status: 404 });
+});
+
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     if(error) {
         res.status(400).json({

@@ -3,9 +3,14 @@ import { Books } from "../models/book.model";
 
 export const bookRouter = express.Router();
 
-// bookRouter.get("/api/books", async(req: Request, res: Response) => {
-
-// })
+bookRouter.get("/api/books", async(req: Request, res: Response) => {
+    const books = await Books.find();
+    res.send({
+        success: true,
+        message: "Books retrieved successfully",
+        data: books
+    })
+})
 
 
 bookRouter.post("", async(req: Request, res: Response) => {
