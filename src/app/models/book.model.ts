@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { IBook } from "../interfaces/book.interface";
+import { Borrows } from "./borrow.model";
 
 const bookSchema = new Schema<IBook>(
   {
@@ -27,7 +28,7 @@ const bookSchema = new Schema<IBook>(
     },
     isbn: {
       type: String,
-      unique: [true, "The isbn number is already taken"],
+      unique: [true, "The isbn number {VALUE} is already taken"],
       required: true,
     },
     description: String,
@@ -48,7 +49,7 @@ const bookSchema = new Schema<IBook>(
   }
 );
 
-bookSchema.pre("findOneAndUpdate", async function(next) {
+bookSchema.pre("findOneAndUpdate", function(next) {
   const updates: any = this.getUpdate();
 
   if(updates.copies && updates.copies > 0) {
@@ -59,6 +60,11 @@ bookSchema.pre("findOneAndUpdate", async function(next) {
     updates.available = false;
   }
 
+  next();
+})
+
+bookSchema.post("findOneAndDelete", async function(docs, next) {
+  await Borrows.deleteOne({book: docs._id});
   next();
 })
 

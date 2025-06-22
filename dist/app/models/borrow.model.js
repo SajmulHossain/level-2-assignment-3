@@ -22,6 +22,7 @@ const borrowSchema = new mongoose_1.Schema({
         type: Number,
         required: true,
         default: 1,
+        min: 1
     },
 }, { versionKey: false, timestamps: true });
 borrowSchema.static("checkCopies", function (id, quantity) {

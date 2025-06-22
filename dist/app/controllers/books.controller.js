@@ -46,24 +46,24 @@ exports.bookRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, f
     res.json({
         success: true,
         message: "Book retrieved successfully",
-        data: book
+        data: book,
     });
 }));
 // * update book
-exports.bookRouter.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.bookRouter.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { body } = req;
     const book = yield book_model_1.Books.findByIdAndUpdate(id, body, { new: true });
     res.status(202).json({
         success: true,
         message: "Book updated successfully",
-        data: book
+        data: book,
     });
 }));
-// * delete book 
+// * delete book
 exports.bookRouter.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const book = yield book_model_1.Books.deleteOne({ _id: id });
+    yield book_model_1.Books.findByIdAndDelete(id);
     res.json({
         success: true,
         message: "Book deleted successfully",
