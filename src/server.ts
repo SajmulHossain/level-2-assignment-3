@@ -1,9 +1,7 @@
 import { Server } from "http";
-import dotenv from 'dotenv'
 import mongoose from "mongoose";
 import app from "./app";
-
-dotenv.config();
+import {db_pass, db_user} from "./config/env.config"
 
 let server: Server;
 const port: number = 3000;
@@ -11,7 +9,7 @@ const port: number = 3000;
 async function main() {
     try {
         await mongoose.connect(
-          `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.saftd.mongodb.net/libraryDB?retryWrites=true&w=majority&appName=Cluster0`
+          `mongodb+srv://${db_user}:${db_pass}@cluster0.saftd.mongodb.net/libraryDB?retryWrites=true&w=majority&appName=Cluster0`
         );
 
         server = app.listen(port, () => {
@@ -21,5 +19,6 @@ async function main() {
         console.log(error);
     }
 }
+
 
 main();
