@@ -221,11 +221,11 @@ Returns aggregation of total borrowed quantity per book:
 
 ---
 
-## 📹 Demo
+<!-- ## 📹 Demo
 
-[📺 Watch Demo Video](https://your-demo-link.com)
+[📺 Watch Demo Video](https://your-demo-link.com) -->
 
----
+<!-- --- -->
 
 ## 🌐 Live Link
 
