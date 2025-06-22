@@ -7,5 +7,5 @@ export interface IBorrowModel {
 }
 
 export interface BorrowStaticMethod extends Model<IBorrowModel> {
-    checkCopies(id: string, quantity: number): Error | boolean
+    checkCopies(id: Types.ObjectId, quantity: number): Error | number
 }

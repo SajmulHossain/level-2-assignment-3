@@ -1,5 +1,8 @@
 import { model, Schema } from "mongoose";
-import { BorrowStaticMethod, IBorrowModel } from "../interfaces/borrow.interface";
+import {
+  BorrowStaticMethod,
+  IBorrowModel,
+} from "../interfaces/borrow.interface";
 import { Books } from "./book.model";
 
 const borrowSchema = new Schema<IBorrowModel, BorrowStaticMethod>(
@@ -18,30 +21,43 @@ const borrowSchema = new Schema<IBorrowModel, BorrowStaticMethod>(
   { versionKey: false, timestamps: true }
 );
 
-borrowSchema.static("checkCopies", async function(id, quantity) {
+borrowSchema.static("checkCopies", async function (id, quantity) {
   const book = await Books.findById(id);
 
-  if(!book) {
-     throw {
-      name: 'ValidationError',
-      message: 'Book not found with this id'
-     };
+  if (!book) {
+    throw {
+      name: "ValidationError",
+      message: "Book not found with this id",
+    };
   }
 
-  if(book?.copies < quantity) {
+  if (book?.copies < quantity) {
     throw {
       name: "stockError",
       message: "Not enough sufficient book",
     };
   }
 
-  return true;
-})
+  return book?.copies;
+});
 
-borrowSchema.pre("save", async function(next) {
-  console.log(this.quantity);
-  await Books.findByIdAndUpdate(this.book, {$inc: {copies: -this.quantity}})
+borrowSchema.pre("save", async function (next) {
+  await Books.findByIdAndUpdate(this.book, {
+    $inc: { copies: -this.quantity },
+  });
   next();
-})
+});
 
-export const Borrows = model<IBorrowModel, BorrowStaticMethod>("Borrows", borrowSchema);
+borrowSchema.post("save", async function (doc,next) {
+  const copies = await Borrows.checkCopies(this.book, -1);
+  if (doc && !copies) {
+    await Books.findByIdAndUpdate(this.book, { available: false });
+  }
+
+  next();
+});
+
+export const Borrows = model<IBorrowModel, BorrowStaticMethod>(
+  "Borrows",
+  borrowSchema
+);
