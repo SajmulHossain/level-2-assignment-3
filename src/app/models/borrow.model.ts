@@ -38,4 +38,10 @@ borrowSchema.static("checkCopies", async function(id, quantity) {
   return true;
 })
 
+borrowSchema.pre("save", async function(next) {
+  console.log(this.quantity);
+  await Books.findByIdAndUpdate(this.book, {$inc: {copies: -this.quantity}})
+  next();
+})
+
 export const Borrows = model<IBorrowModel, BorrowStaticMethod>("Borrows", borrowSchema);

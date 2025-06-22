@@ -9,10 +9,10 @@ export const borrowRouter = express.Router();
 borrowRouter.post("", async(req: Request, res: Response) => {
     const {body} = req;
     const isEnoughCopies = await Borrows.checkCopies(body.book, body.quantity);
-    console.log(isEnoughCopies);
+    const borrow = await Borrows.create(body);
     res.status(201).json({
         success: true,
         message: "Borrow request done",
-        isEnoughCopies
+        data: borrow
     })
 })
