@@ -38,6 +38,10 @@ borrowSchema.static("checkCopies", async function (id, quantity) {
     };
   }
 
+  if (book?.copies - quantity === 0) {
+    await Books.findByIdAndUpdate(id, { available: false });
+  }
+
   return book?.copies;
 });
 
@@ -48,14 +52,14 @@ borrowSchema.pre("save", async function (next) {
   next();
 });
 
-borrowSchema.post("save", async function (doc,next) {
-  const copies = await Borrows.checkCopies(this.book, -1);
-  if (doc && !copies) {
-    await Books.findByIdAndUpdate(this.book, { available: false });
-  }
+// borrowSchema.post("save", async function (doc,next) {
+//   const copies = await Borrows.checkCopies(this.book, -1);
+//   if (doc && !copies) {
+//     await Books.findByIdAndUpdate(this.book, { available: false });
+//   }
 
-  next();
-});
+//   next();
+// });
 
 export const Borrows = model<IBorrowModel, BorrowStaticMethod>(
   "Borrows",
