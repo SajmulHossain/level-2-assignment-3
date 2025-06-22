@@ -24,15 +24,15 @@ borrowRouter.get("", async (req: Request, res: Response) => {
       },
     },
     {
-        $project: {
-            _id: 0,
-            book: {
-                title: "$_id.title",
-                isbn: "$_id.isbn"
-            },
-            totalQuantity: 1
-        }
-    }
+      $project: {
+        _id: 0,
+        book: {
+          title: "$_id.title",
+          isbn: "$_id.isbn",
+        },
+        totalQuantity: 1,
+      },
+    },
   ]);
 
   res.status(200).json({
