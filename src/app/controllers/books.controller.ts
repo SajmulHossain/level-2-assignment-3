@@ -7,10 +7,12 @@ export const bookRouter = express.Router();
 bookRouter.get("", async (req: Request, res: Response) => {
   const { filter, sortBy, sort, limit } = req.query;
   const query: { genre: string } | {} = filter ? { genre: filter } : {};
-  const sorting:{
+  const sorting:
+    | {
         [x: string]: string;
-      } | {} = sortBy ? { [sortBy as string]: sort || "asc" } : {};
-  const limitValue:number = limit ? parseInt(limit as string) : 10;
+      }
+    | {} = sortBy ? { [sortBy as string]: sort || "asc" } : {};
+  const limitValue: number = limit ? parseInt(limit as string) : 10;
 
   const books = await Books.find(query).sort(sorting).limit(limitValue);
   res.json({
@@ -19,7 +21,6 @@ bookRouter.get("", async (req: Request, res: Response) => {
     data: books,
   });
 });
-
 
 // * post book
 bookRouter.post("", async (req: Request, res: Response) => {
@@ -33,39 +34,36 @@ bookRouter.post("", async (req: Request, res: Response) => {
   });
 });
 
-
 // * getting single book by it's id
-bookRouter.get("/:id", async(req: Request, res: Response) => {
-    const { id } = req.params;
+bookRouter.get("/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
   const book = await Books.findById(id);
   res.json({
     success: true,
     message: "Book retrieved successfully",
-    data: book
+    data: book,
   });
-})
-
+});
 
 // * update book
-bookRouter.put('/:id', async(req: Request, res:Response) => {
+bookRouter.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { body} = req;
-  const book = await Books.findByIdAndUpdate(id, body, {new: true});
+  const { body } = req;
+  const book = await Books.findByIdAndUpdate(id, body, { new: true });
   res.status(202).json({
     success: true,
     message: "Book updated successfully",
-    data: book
+    data: book,
   });
-})
+});
 
-
-// * delete book 
-bookRouter.delete("/:id", async(req: Request, res: Response) => {
+// * delete book
+bookRouter.delete("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  const book = await Books.deleteOne({_id: id});
+  const book = await Books.deleteOne({ _id: id });
   res.json({
     success: true,
     message: "Book deleted successfully",
     data: null,
   });
-})
+});

@@ -16,6 +16,7 @@ const borrowSchema = new Schema<IBorrowModel, BorrowStaticMethod>(
       type: Number,
       required: true,
       default: 1,
+      min: 1
     },
   },
   { versionKey: false, timestamps: true }

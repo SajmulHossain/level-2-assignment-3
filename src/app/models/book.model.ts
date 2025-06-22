@@ -48,4 +48,18 @@ const bookSchema = new Schema<IBook>(
   }
 );
 
+bookSchema.pre("findOneAndUpdate", async function(next) {
+  const updates: any = this.getUpdate();
+
+  if(updates.copies && updates.copies > 0) {
+    updates.available = true;
+  }
+
+  if(updates.copies === 0) {
+    updates.available = false;
+  }
+
+  next();
+})
+
 export const Books = model("Books", bookSchema);
