@@ -1,8 +1,13 @@
 import express, { Application, NextFunction, Request, Response } from 'express'
 import { bookRouter } from './app/controllers/books.controller';
 import { borrowRouter } from './app/controllers/borrows.controller';
+import cors from 'cors';
 
 const app: Application = express();
+
+app.use(cors({
+    origin: ["http://localhost:5173", "https://library-management-sajmul.vercel.app"]
+}))
 app.use(express.json());
 
 app.use("/api/books", bookRouter);
