@@ -3,9 +3,23 @@ import { Books } from "../models/book.model";
 
 export const bookRouter = express.Router();
 
+
+
+
+// * getTotalCount of books
+bookRouter.get("/states", async (req:Request, res:Response) => {
+  const data = await Books.estimatedDocumentCount();
+
+  res.json({
+    success: true,
+    message: "Data retrived successfully",
+    data,
+  });
+});
+
 // * getting all books with filter, sorting and limit = 10
 bookRouter.get("", async (req: Request, res: Response) => {
-  const { filter, sortBy, sort, limit } = req.query;
+  const { filter, sortBy, sort, limit, skip } = req.query;
   const query: { genre: string } | {} = filter ? { genre: filter } : {};
   const sorting:
     | {
@@ -13,8 +27,9 @@ bookRouter.get("", async (req: Request, res: Response) => {
       }
     | {} = sortBy ? { [sortBy as string]: sort || "asc" } : {};
   const limitValue: number = limit ? parseInt(limit as string) : 10;
+  const skipValue : number = skip ? parseInt(skip as string) : 0;
 
-  const books = await Books.find(query).sort(sorting).limit(limitValue);
+  const books = await Books.find(query).sort(sorting).skip(skipValue * 10).limit(limitValue);
   res.json({
     success: true,
     message: "Books retrieved successfully",
