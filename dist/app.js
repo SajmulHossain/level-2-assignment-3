@@ -23,7 +23,7 @@ app.use((req, res) => {
 app.use((error, req, res, next) => {
     if (error) {
         res.status(error.code || 400).json({
-            message: error.name === 'ValidationError' ? 'Validation failed' : error.name === 'CastError' ? "Document doesn't exist with this id" : error.name === "stockError" ? "Insufficient Copies" : "Unknown Error",
+            // message: error.name === 'ValidationError' ? 'Validation failed' :error.name === 'CastError' ? "Document doesn't exist with this id": error.name === "stockError" ? "Insufficient Copies" : "Unknown Error" ,
             success: false,
             error
         });

@@ -16,13 +16,23 @@ exports.bookRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const book_model_1 = require("../models/book.model");
 exports.bookRouter = express_1.default.Router();
+// * getTotalCount of books
+exports.bookRouter.get("/states", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield book_model_1.Books.estimatedDocumentCount();
+    res.json({
+        success: true,
+        message: "Data retrived successfully",
+        data,
+    });
+}));
 // * getting all books with filter, sorting and limit = 10
 exports.bookRouter.get("", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { filter, sortBy, sort, limit } = req.query;
+    const { filter, sortBy, sort, limit, skip } = req.query;
     const query = filter ? { genre: filter } : {};
     const sorting = sortBy ? { [sortBy]: sort || "asc" } : {};
     const limitValue = limit ? parseInt(limit) : 10;
-    const books = yield book_model_1.Books.find(query).sort(sorting).limit(limitValue);
+    const skipValue = skip ? parseInt(skip) : 0;
+    const books = yield book_model_1.Books.find(query).sort(sorting).skip(skipValue * 10).limit(limitValue);
     res.json({
         success: true,
         message: "Books retrieved successfully",

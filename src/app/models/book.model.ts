@@ -49,6 +49,22 @@ const bookSchema = new Schema<IBook>(
   }
 );
 
+bookSchema.pre("save", async function(next) {
+  const isbn = this.isbn;
+  const book = await Books.findOne({isbn});
+  
+  if(book) {
+    console.log(book);
+    throw {
+      success: false,
+      message: 'ISBN number is already exist',
+      data: book
+    }
+  }
+
+  next();
+})
+
 bookSchema.pre("findOneAndUpdate", function(next) {
   const updates: any = this.getUpdate();
 
